@@ -2,7 +2,7 @@
 This queue represents a buffer between sender and receiver that run from separate threads
 
 ## How to run
-Launching is performed by selecting the test: just pass the number as an argument
+Launching is performed by selecting the test: just pass the number as an argument in command line
 
 For example, "double-threaded-queue.exe 2" runs test #2
 
