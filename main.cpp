@@ -6,7 +6,13 @@
 
 int main(int argc, char** argv) 
 {
-	CRenderQueue queue{ 100 };
+	if (argc != 2)
+	{
+		std::cout << "Choose test number from 1 to 4 and come back\n";
+		return -1;
+	}
+
+	CRenderQueue queue{};
 	CGame game(&queue);
 	CGraphics graphics(&queue);
 
@@ -19,4 +25,5 @@ int main(int argc, char** argv)
 	graphicsThread.join();
 
     std::cout << "\nFinish!\n";
+	return 0;
 }

@@ -14,7 +14,6 @@ void CRenderQueue::WriteValue(uint32_t value)
 {
 	semWrite.acquire();
 
-	//if (!buffer.empty())		/// ?
 	std::cout << "Send value   =====> " << value << "\n";
 	for (size_t i = 0; i < 4; ++i)
 	{
@@ -40,7 +39,8 @@ void CRenderQueue::WriteData(const char* data, size_t size)
 
 ERQCommand CRenderQueue::ReadCommand()
 {
-	semRead.acquire();
+	if (!semRead.try_acquire_for(std::chrono::milliseconds(1000)))
+		return ERQCommand::INVALID;
 
 	ERQCommand cmd{ 0 };
 	if (!buffer.empty())
@@ -73,6 +73,8 @@ uint32_t CRenderQueue::ReadValue()
 
 	if (!buffer.empty())
 	{
+		if (buffer.size() < 4)
+			throw "Not enough data in buffer";
 		for (size_t i = 0; i < 4; ++i)
 		{
 			unsigned char oneByte = static_cast<unsigned char>(buffer.front());
@@ -115,7 +117,6 @@ const char* CRenderQueue::ReadData(size_t size)
 	return res;
 };
 
-
 void CRenderQueue::Flush()
 {
 	isFlushing.store(true);
@@ -134,7 +135,7 @@ void CRenderQueue::Reset()
 {
 	isFlushing.store(true);
 	std::cout << "\n.....waiting for reset....... \n\n";
-	// wait for current command being processed // atomic flag ?
+	// wait for current command being processed
 	while (!isProcessingDone.load())
 	{
 	}

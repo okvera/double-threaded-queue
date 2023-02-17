@@ -10,14 +10,11 @@
 class CRenderQueue
 {
 	std::queue<char> buffer;
-	std::uint32_t maxSize;
 
 	std::counting_semaphore<100> semWrite{ 100 };
 	std::counting_semaphore<100> semRead{ 0 };
-	std::binary_semaphore semData{ 1 };
 
 public:
-	CRenderQueue(uint32_t size) : maxSize(size) {};
 	
 	void WriteCommand(ERQCommand cmd);
 	void WriteValue(uint32_t value);

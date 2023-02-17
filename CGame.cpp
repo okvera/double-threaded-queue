@@ -17,6 +17,8 @@ void CGame::Send(int testType)
 		ResetBufferTest();
 		break;
 	default:
+		std::cout << "There is no test with number " << testType << "\n";
+		queue->isSendingDone.store(true);
 		break;
 	}
 }
@@ -52,11 +54,6 @@ void CGame::NormalDataTest()
 
 	queue->isSendingDone.store(true);
 	std::cout << "All sended\n";
-	while (!queue->isProcessingDone.load())
-	{
-	}
-	std::cout << "Press any key to choose another test\n";
-	std::cin.ignore();
 }
 
 void CGame::IncorrectDataTest()
